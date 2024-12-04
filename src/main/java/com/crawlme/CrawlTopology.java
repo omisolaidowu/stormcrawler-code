@@ -17,18 +17,18 @@ public class CrawlTopology extends ConfigurableTopology {
     protected int run(String[] args) {
         TopologyBuilder builder = new TopologyBuilder();
 
-        // Spout: URLSpout
+        // call spout: URLSpout
         builder.setSpout("url-spout", new URLSpout());
 
-        // Bolt: ParseBolt
+        // call bolt: ParseBolt
         builder.setBolt("parse-bolt", new ParseBolt())
                 .shuffleGrouping("url-spout");
 
-        // Bolt: CSVExportBolt
+        // call bolt: CSVExportBolt
         builder.setBolt("csv-export", new CSVExportBolt())
                 .shuffleGrouping("parse-bolt");
 
-        // Submit topology
+        // submit the crawl topology
         return submit("crawl-topology", conf, builder);
     }
 }

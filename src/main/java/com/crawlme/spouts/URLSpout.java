@@ -25,9 +25,9 @@ public class URLSpout extends BaseRichSpout {
     public void open(Map<String, Object> config, TopologyContext context, SpoutOutputCollector collector) {
         this.collector = collector;
         try {
-            // Initialize the BufferedReader with the seed file path
+            // initialize the BufferedReader with the seed file path
             reader = new BufferedReader(new FileReader("D:/ZenRows/newstormc/storm-crawler/seeds.txt"));
-            eofReached = false; // Initialize EOF flag
+            eofReached = false; // initialize EOF flag
         } catch (IOException e) {
             logger.log(Level.SEVERE, "Error opening file: {0}", e.getMessage());
         }
@@ -36,18 +36,18 @@ public class URLSpout extends BaseRichSpout {
     @Override
     public void nextTuple() {
         if (eofReached) {
-            return; // Stop emitting tuples once EOF is reached
+            return; // stop emitting tuples once EOF is reached
         }
 
         try {
-            // Read a line (URL) from the seed file
+            // read a line (URL) from the seed file
             String url = reader.readLine();
             if (url != null) {
-                // Log and emit the URL as a tuple
+                // log and emit the URL as a tuple
                 logger.log(Level.INFO, "Emitting URL: {0}", url); // Log the emitted URL
                 collector.emit(new Values(url));
             } else {
-                // Reached end of file
+                // reached end of file
                 logger.info("No more URLs to emit.");
                 eofReached = true;  // Set EOF flag
             }
@@ -59,7 +59,7 @@ public class URLSpout extends BaseRichSpout {
     @Override
     public void close() {
         try {
-            // Close the BufferedReader
+            // close the BufferedReader
             if (reader != null) {
                 reader.close();
             }
@@ -70,7 +70,7 @@ public class URLSpout extends BaseRichSpout {
 
     @Override
     public void declareOutputFields(OutputFieldsDeclarer declarer) {
-        // Declare the output field for the spout
+        // declare the output field for the spout
         declarer.declare(new Fields("url"));
     }
 }
